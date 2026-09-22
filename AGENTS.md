@@ -43,6 +43,23 @@ projets qui le symlinkent — pas de copier-coller à répercuter.
 - **Ne jamais ajouter de ligne d'attribution `Co-Authored-By` (ou
   équivalente) dans le message de commit.**
 
+## Proposition de règles et de skills en cours de projet
+
+- Un projet démarre en général sans règles propres ; elles émergent au
+  fil des discussions. En fin de session, ou dès qu'un signal fort
+  apparaît (correction explicite de l'utilisateur, décision actée,
+  pattern qui se répète), analyser la discussion et proposer les
+  règles et/ou skills qui semblent pertinents à en tirer — pas de
+  proposition systématique après chaque échange mineur.
+- Une règle proposée est par défaut de portée **spécifique au projet**
+  (`.cursor/rules/*.mdc` + jumeau `.claude/rules/*.md`). Si elle semble
+  agnostique au projet (transposable ailleurs), le signaler et proposer
+  également son placement dans ce socle partagé (`AGENTS.md`) — la
+  décision finale de portée revient à l'utilisateur.
+- **Aucune règle ni skill n'est ajouté sans accord explicite de
+  l'utilisateur.** Présenter la proposition (contenu + emplacement) et
+  attendre validation avant toute écriture.
+
 ## Scripts
 
 - Tout script (shell, PowerShell, Python, etc.) doit être versionné dans
