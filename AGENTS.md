@@ -43,6 +43,20 @@ projets qui le symlinkent — pas de copier-coller à répercuter.
 - **Ne jamais ajouter de ligne d'attribution `Co-Authored-By` (ou
   équivalente) dans le message de commit.**
 
+## Scripts
+
+- Tout script (shell, PowerShell, Python, etc.) doit être versionné dans
+  git et accompagné d'un changelog dédié, colocalisé avec lui :
+  `<nom_du_script>.changelog.md` (même nom de base que le script, en
+  minuscule, cf. convention de nommage ci-dessus).
+- Le changelog liste les entrées par ordre antéchronologique (la plus
+  récente en premier), chacune datée (`AAAA-MM-JJ`) et décrivant le
+  changement en une ligne concise. Langue : français (langue de travail
+  par défaut), indépendamment de la langue anglaise des messages de
+  commit.
+- Toute modification fonctionnelle du script s'accompagne d'une entrée
+  correspondante dans son changelog, dans le même commit.
+
 ## Portabilité Cursor / Claude Code
 
 - Claude Code ne lit pas `AGENTS.md` nativement mais l'importe via un
