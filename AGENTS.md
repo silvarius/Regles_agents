@@ -76,6 +76,15 @@ projets qui le symlinkent — pas de copier-coller à répercuter.
 
 ## Portabilité Cursor / Claude Code
 
+- Le symlink `AGENTS.md` (créé par `init_projet.ps1` sous Windows ou
+  son jumeau `init_projet.sh` sous Linux/macOS) est **relatif**, pas
+  absolu — un chemin absolu Windows (`C:\Users\...`) ne veut rien dire
+  sous Linux et casse le lien au checkout. Prérequis pour que le lien
+  survive un `git clone`/`checkout` sur l'autre OS :
+  `git config --global core.symlinks true` des deux côtés (sous
+  Windows, nécessite aussi le Mode Développeur actif) — sans ça, Git
+  stocke le symlink comme un fichier texte ordinaire contenant le
+  chemin cible, pas comme un vrai lien.
 - Claude Code ne lit pas `AGENTS.md` nativement mais l'importe via un
   `CLAUDE.md` de projet (`@AGENTS.md`).
 - Bug connu Cursor (non résolu à ce jour) : `AGENTS.md` peut être traité
