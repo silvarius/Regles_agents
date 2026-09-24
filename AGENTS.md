@@ -74,6 +74,17 @@ projets qui le symlinkent — pas de copier-coller à répercuter.
 - Toute modification fonctionnelle du script s'accompagne d'une entrée
   correspondante dans son changelog, dans le même commit.
 
+## Diagnostic SSH sous Windows
+
+- Sur Windows, Git Bash a son propre binaire/agent SSH, distinct de
+  l'agent Windows OpenSSH natif que `git` utilise réellement via
+  `core.sshCommand` — un `ssh -T git@github.com` lancé depuis Git Bash
+  peut donc échouer ("Permission denied") alors que `git push`/`git
+  ls-remote` fonctionnent déjà. Ne pas conclure à un problème de clé SSH
+  sans avoir vérifié `core.sshCommand` et testé avec `git ls-remote`.
+  Procédure complète : `ssh-windows-diagnostic.md` (même dossier).
+  Ne s'applique pas à macOS/Linux.
+
 ## Portabilité Cursor / Claude Code
 
 - Le symlink `AGENTS.md` (créé par `init_projet.ps1` sous Windows ou
