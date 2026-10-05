@@ -35,9 +35,13 @@ projets qui le symlinkent — pas de copier-coller à répercuter.
 
 ## Commits
 
-- Avant tout `git commit` : présenter le message de commit proposé et
-  attendre validation explicite de l'utilisateur avant de l'exécuter.
-  Ne jamais lancer `git commit` directement sans cette étape.
+- Une demande de commit de l'utilisateur vaut validation du contenu
+  commité : ne pas redemander de valider le contenu ni le statut du
+  travail avant ou après le commit.
+- Seul le **message** reste soumis à l'utilisateur : avant tout
+  `git commit`, présenter le message proposé et attendre son accord
+  avant de l'exécuter. Ne jamais lancer `git commit` directement sans
+  cette étape.
 - **Format du message** : en anglais, compact, une ligne par élément
   séparée par un point-virgule (`;`) — pas de paragraphe, pas de détail
   narratif. Le détail complet vit dans les changelogs du projet quand
