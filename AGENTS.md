@@ -48,8 +48,25 @@ projets qui le symlinkent — pas de copier-coller à répercuter.
   il en existe. Aucun résultat chiffré ni détail de mise en œuvre dans
   le message : seulement ce qui change (fichiers, périmètre, version),
   jamais les valeurs ni les effets mesurés.
+- **Le message ne décrit que ce que le commit contient** (le diff
+  indexé) : jamais le contexte, la motivation, un réglage hors dépôt ni
+  du travail non commité. Le plus concis possible : le strict minimum
+  pour identifier le changement. Relire le diff avant de proposer le
+  message.
 - **Ne jamais ajouter de ligne d'attribution `Co-Authored-By` (ou
   équivalente) dans le message de commit.**
+
+## Dépôts git
+
+- **Branche principale : `master`** pour tous les dépôts (harmonisé le
+  26/10/2026). Un nouveau dépôt s'initialise avec `git init -b master`
+  (`init.defaultBranch=master` est réglé sur le poste Linux) ; sur GitHub,
+  la première branche poussée devient la branche par défaut : pousser
+  `master`, pas `main`.
+- `core.symlinks` doit être à `true` dans chaque dépôt (voir
+  `init_projet.sh`) : à `false`, les liens `AGENTS.md` et `.claude/skills`
+  sont stockés comme de simples fichiers texte et les règles ne sont plus
+  chargées.
 
 ## Proposition de règles et de skills en cours de projet
 

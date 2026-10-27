@@ -24,6 +24,15 @@ if [ ! -d "$PROJECT_PATH" ]; then
     exit 1
 fi
 
+# Hook commit-msg (refuse les messages avec Co-Authored-By) : source dans
+# Outils/hooks/commit-msg. Hooks locaux, donc a reinstaller apres chaque clone.
+HOOK_SRC="$SCRIPT_DIR/../Outils/hooks/commit-msg"
+if [ -f "$HOOK_SRC" ] && hook_dest="$(git -C "$PROJECT_PATH" rev-parse --git-path hooks/commit-msg 2>/dev/null)"; then
+    case "$hook_dest" in /*) ;; *) hook_dest="$PROJECT_PATH/$hook_dest" ;; esac
+    mkdir -p "$(dirname "$hook_dest")" && cp "$HOOK_SRC" "$hook_dest" && chmod +x "$hook_dest" \
+        && echo "Hook commit-msg installe : $hook_dest"
+fi
+
 if [ -e "$TARGET_AGENTS" ] || [ -L "$TARGET_AGENTS" ]; then
     if [ -L "$TARGET_AGENTS" ]; then
         echo "AGENTS.md est deja un symlink dans $PROJECT_PATH - rien a faire."

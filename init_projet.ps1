@@ -23,6 +23,17 @@ if (-not (Test-Path $ProjectPath)) {
     exit 1
 }
 
+# Hook commit-msg (refuse les messages avec Co-Authored-By) : source dans
+# Outils\hooks\commit-msg. Hooks locaux, donc a reinstaller apres chaque clone.
+$HookSrc = Join-Path $PSScriptRoot "..\Outils\hooks\commit-msg"
+$HookDest = git -C $ProjectPath rev-parse --git-path hooks/commit-msg 2>$null
+if ((Test-Path $HookSrc) -and ($LASTEXITCODE -eq 0) -and $HookDest) {
+    if (-not [System.IO.Path]::IsPathRooted($HookDest)) { $HookDest = Join-Path $ProjectPath $HookDest }
+    New-Item -ItemType Directory -Force (Split-Path $HookDest) | Out-Null
+    Copy-Item $HookSrc $HookDest -Force
+    Write-Host "Hook commit-msg installe : $HookDest"
+}
+
 if (Test-Path $TargetAgents) {
     $existing = Get-Item $TargetAgents -Force
     if ($existing.LinkType -eq "SymbolicLink") {
