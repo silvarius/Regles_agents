@@ -67,6 +67,10 @@ projets qui le symlinkent — pas de copier-coller à répercuter.
   `init_projet.sh`) : à `false`, les liens `AGENTS.md` et `.claude/skills`
   sont stockés comme de simples fichiers texte et les règles ne sont plus
   chargées.
+- **Dossiers `Archives/`** : toujours dans le `.gitignore` du dépôt qui les
+  contient (`Archives/`). Un travail abandonné s'archive dans un sous-dossier
+  daté, et une ligne de l'`INDEX.md` du dossier `Archives/` dit ce que c'est et
+  pourquoi il est abandonné. Ces fichiers ne sont lus que sur demande.
 
 ## Proposition de règles et de skills en cours de projet
 

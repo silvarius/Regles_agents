@@ -1,5 +1,11 @@
 # Changelog — init_projet.sh
 
+## 2026-11-02
+
+- Ajoute `Archives/` au `.gitignore` du projet cible s'il est un dépôt git et
+  ne l'a pas déjà (sans doublon, `.gitignore` créé au besoin). Fait avant les
+  sorties anticipées.
+
 ## 2026-10-27
 
 - Installe le hook `commit-msg` (`Outils/hooks/commit-msg`) dans le dépôt

@@ -33,6 +33,15 @@ if [ -f "$HOOK_SRC" ] && hook_dest="$(git -C "$PROJECT_PATH" rev-parse --git-pat
         && echo "Hook commit-msg installe : $hook_dest"
 fi
 
+# Archives/ (travaux abandonnes) ignore par git : ligne ajoutee au .gitignore
+# du projet s'il est un depot et ne l'a pas deja. Fait avant les sorties
+# anticipees, comme le hook.
+GITIGNORE="$PROJECT_PATH/.gitignore"
+if git -C "$PROJECT_PATH" rev-parse --git-dir >/dev/null 2>&1 && ! grep -qxF 'Archives/' "$GITIGNORE" 2>/dev/null; then
+    { [ -s "$GITIGNORE" ] && [ -n "$(tail -c1 "$GITIGNORE")" ] && echo; echo 'Archives/'; } >> "$GITIGNORE"
+    echo "Archives/ ajoute a $GITIGNORE"
+fi
+
 if [ -e "$TARGET_AGENTS" ] || [ -L "$TARGET_AGENTS" ]; then
     if [ -L "$TARGET_AGENTS" ]; then
         echo "AGENTS.md est deja un symlink dans $PROJECT_PATH - rien a faire."

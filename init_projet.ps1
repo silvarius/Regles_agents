@@ -34,6 +34,20 @@ if ((Test-Path $HookSrc) -and ($LASTEXITCODE -eq 0) -and $HookDest) {
     Write-Host "Hook commit-msg installe : $HookDest"
 }
 
+# Archives/ (travaux abandonnes) ignore par git : ligne ajoutee au .gitignore
+# du projet s'il est un depot et ne l'a pas deja. Fait avant les sorties
+# anticipees, comme le hook.
+$GitIgnore = Join-Path $ProjectPath ".gitignore"
+git -C $ProjectPath rev-parse --git-dir 2>$null | Out-Null
+if ($LASTEXITCODE -eq 0) {
+    $raw = if (Test-Path $GitIgnore) { Get-Content $GitIgnore -Raw } else { "" }
+    if (-not (($raw -split "`r?`n") -contains "Archives/")) {
+        $prefix = if ($raw -and -not $raw.EndsWith("`n")) { "`n" } else { "" }
+        Add-Content -Path $GitIgnore -Value ($prefix + "Archives/`n") -NoNewline
+        Write-Host "Archives/ ajoute a $GitIgnore"
+    }
+}
+
 if (Test-Path $TargetAgents) {
     $existing = Get-Item $TargetAgents -Force
     if ($existing.LinkType -eq "SymbolicLink") {
