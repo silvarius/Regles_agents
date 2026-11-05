@@ -35,13 +35,20 @@ projets qui le symlinkent — pas de copier-coller à répercuter.
 
 ## Commits
 
-- Une demande de commit de l'utilisateur vaut validation du contenu
-  commité : ne pas redemander de valider le contenu ni le statut du
-  travail avant ou après le commit.
-- Seul le **message** reste soumis à l'utilisateur : avant tout
-  `git commit`, présenter le message proposé et attendre son accord
-  avant de l'exécuter. Ne jamais lancer `git commit` directement sans
-  cette étape.
+- **Séquence à suivre dès que le mot « commit » apparaît, dans la demande
+  de l'utilisateur ou dans ma propre réponse :**
+  1. Relire cette section avant toute réponse, y compris avant de
+     récapituler le travail.
+  2. **Une demande de commit vaut validation du contenu et du statut du
+     travail.** Marquer « VALIDÉ (date) » les entrées « EN ATTENTE DE
+     VALIDATION » du changelog et de la spec, dans ce même commit. Ne
+     poser aucune question de validation (version, contenu, périmètre)
+     et ne pas proposer de scinder le commit pour en attendre une.
+  3. Relire le diff indexé et rédiger le message (format ci-dessous).
+  4. Présenter le message : c'est la seule chose soumise à
+     l'utilisateur, et sa seule question. Attendre son accord.
+  5. Seulement après cet accord, lancer `git commit`. Ne jamais lancer
+     `git commit` sans passer par les étapes 3 et 4.
 - **Format du message** : en anglais, compact, une ligne par élément
   séparée par un point-virgule (`;`) — pas de paragraphe, pas de détail
   narratif. Le détail complet vit dans les changelogs du projet quand
