@@ -55,6 +55,19 @@ projets qui le symlinkent — pas de copier-coller à répercuter.
   il en existe. Aucun résultat chiffré ni détail de mise en œuvre dans
   le message : seulement ce qui change (fichiers, périmètre, version),
   jamais les valeurs ni les effets mesurés.
+- **Pas de détails de fonctionnalité** : ni parenthèses explicatives, ni
+  sous-liste de ce que fait un élément. Un élément se nomme (module,
+  option, champ, fichier) et s'arrête là ; les éléments de même nature
+  se regroupent en une liste séparée par des virgules.
+  - Mauvais : `add propfirm_progression (throttled lines, atomic
+    progression.json, optional progression argument across optimiser,
+    jambes, phase 2, fixed point and phase 3 pilots, --intervalle
+    option); add fraction_reinvestie (auto_finance) and strict
+    budget_max (rampe, sequentiel: purchase deferral, cycle stopped when
+    a non-refusable fee breaches the budget) scenario fields; add
+    optional plan fee activation`
+  - Bon : `add propfirm_progression, fraction_reinvestie and budget_max
+    scenario fields, plan fee activation`
 - **Le message ne décrit que ce que le commit contient** (le diff
   indexé) : jamais le contexte, la motivation, un réglage hors dépôt ni
   du travail non commité. Le plus concis possible : le strict minimum
