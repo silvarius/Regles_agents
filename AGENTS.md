@@ -126,6 +126,22 @@ projets qui le symlinkent — pas de copier-coller à répercuter.
 - Toute modification fonctionnelle du script s'accompagne d'une entrée
   correspondante dans son changelog, dans le même commit.
 
+## Fichiers de prompt
+
+- Tous les fichiers de prompt (portage, backtest, retour, correction,
+  rapport, etc.) se placent par défaut dans le dossier `Prompts/` à la
+  racine du dossier maître Trading, jamais dans le dossier d'un projet.
+- Sous-dossier par projet, sur le modèle de `Modeles/` :
+  `Prompts/<projet>/prompt_<objet>.md` (ex. `Prompts/maAtr/`,
+  `Prompts/Recherche/Retour1/`). Les prompts transverses sans projet
+  vont dans `Prompts/Divers/`.
+- `Prompts/` n'est **pas versionné** (ni dépôt git, ni sous-dossier d'un
+  dépôt) : ne jamais y lancer `git init` ni l'ajouter à un dépôt.
+- Les prompts archivés d'un projet restent dans son `Archives/` (lus
+  seulement sur demande).
+- Les références à un prompt dans le code, les changelogs ou la
+  documentation citent son chemin `Prompts/...`.
+
 ## Données OHLCV (bucket S3 public)
 
 - Les données OHLCV des actifs sont dans un bucket OVH public en lecture,
