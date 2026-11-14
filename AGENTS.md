@@ -126,6 +126,19 @@ projets qui le symlinkent — pas de copier-coller à répercuter.
 - Toute modification fonctionnelle du script s'accompagne d'une entrée
   correspondante dans son changelog, dans le même commit.
 
+## Données OHLCV (bucket S3 public)
+
+- Les données OHLCV des actifs sont dans un bucket OVH public en lecture,
+  sans clé : `resodia-ohlcv` (endpoint
+  `https://s3.eu-west-par.io.cloud.ovh.net/`, virtual host
+  `https://resodia-ohlcv.s3.eu-west-par.io.cloud.ovh.net/`).
+- Récupération (postes comme VPS, depuis un clone du dépôt `Market_data`) :
+  `python S3_ovh_ohlcv/fetch_data.py` → `Market_data/Base_data/`
+  (options `--prefix`, `--dest`, `--list`). Détail et envoi de fichiers :
+  skill `s3-ovh-ohlcv` du dépôt `Market_data`.
+- Aucune clé en lecture. Les clés d'écriture ne vont jamais dans un dépôt
+  ni dans le dossier Trading (synchronisé) : profil dans `~/.aws/` du poste.
+
 ## Diagnostic SSH sous Windows
 
 - Sur Windows, Git Bash a son propre binaire/agent SSH, distinct de
