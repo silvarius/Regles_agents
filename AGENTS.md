@@ -87,6 +87,13 @@ projets qui le symlinkent — pas de copier-coller à répercuter.
   `init_projet.sh`) : à `false`, les liens `AGENTS.md` et `.claude/skills`
   sont stockés comme de simples fichiers texte et les règles ne sont plus
   chargées.
+- **`Modeles/` est un dépôt unique, `Master`** (remote `silvarius/Master`) : il
+  réunit Gunmaster, Recherche et propfirm (fusion du 2026-11-16, historiques
+  conservés ; les anciens dépôts sont archivés en lecture seule sur GitHub). Un
+  seul `.git`, à la racine de `Modeles/` : aucun dépôt dans les sous-dossiers de
+  projet. Les liens `AGENTS.md` des sous-dossiers (`../../Regles_agents/…`) et
+  celui de la racine (`../Regles_agents/…`) supposent `Modeles/` directement sous
+  `Trading/`. Les dossiers `Resultats/` sont ignorés à tous les niveaux.
 - **Dossiers `Archives/`** : toujours dans le `.gitignore` du dépôt qui les
   contient (`Archives/`). Un travail abandonné s'archive dans un sous-dossier
   daté, et une ligne de l'`INDEX.md` du dossier `Archives/` dit ce que c'est et
