@@ -160,8 +160,8 @@ existent comme cas triviaux pour que l'identité reste uniforme.
 
 Décisions de Jérôme (2026-11-16) :
 
-- Les projets de `Modeles/` (Gunmaster, Recherche, propfirm) sont fusionnés
-  dans un dépôt unique, **`Master`**, à la racine de `Modeles/`. Historiques
+- Les projets de l’ancien dossier `Modeles/` (Gunmaster, Recherche, propfirm) sont fusionnés
+  dans un dépôt unique, **`Master`**, à la racine de `Trading/Master/` (dossier renommé le 2026-11-17). Historiques
   conservés ; les anciens dépôts sont archivés en lecture seule.
 - Un dossier par **contexte master** (`Gunmaster/`, `Propmaster/`,
   `Futurmaster/` à venir), chacun avec un espace backtest et un espace

@@ -87,14 +87,14 @@ projets qui le symlinkent — pas de copier-coller à répercuter.
   `init_projet.sh`) : à `false`, les liens `AGENTS.md` et `.claude/skills`
   sont stockés comme de simples fichiers texte et les règles ne sont plus
   chargées.
-- **`Modeles/` est un dépôt unique, `Master`** (remote `silvarius/Master`) : il
+- **`Master/` est un dépôt unique** (dossier disque `Trading/Master/`) (remote `silvarius/Master`) : il
   réunit Gunmaster et Propmaster (contextes master), `Ressources_master/` et
   `Strategies/` (fusion du 2026-11-16 de Gunmaster, Recherche et propfirm,
   historiques conservés ; les anciens dépôts sont archivés en lecture seule sur
   GitHub ; `Recherche/` et `propfirm/` ont été réaffectés le 2026-11-17). Un
-  seul `.git`, à la racine de `Modeles/` : aucun dépôt dans les sous-dossiers de
+  seul `.git`, à la racine de `Master/` : aucun dépôt dans les sous-dossiers de
   projet. Les liens `AGENTS.md` des sous-dossiers et celui de la racine
-  (`../Regles_agents/…`) sont relatifs et supposent `Modeles/` directement sous
+  (`../Regles_agents/…`) sont relatifs et supposent `Master/` directement sous
   `Trading/`. Les dossiers `Resultats/` sont ignorés à tous les niveaux.
 - **Dossiers `Archives/`** : toujours dans le `.gitignore` du dépôt qui les
   contient (`Archives/`). Un travail abandonné s'archive dans un sous-dossier
@@ -140,7 +140,7 @@ projets qui le symlinkent — pas de copier-coller à répercuter.
 - Tous les fichiers de prompt (portage, backtest, retour, correction,
   rapport, etc.) se placent par défaut dans le dossier `Prompts/` à la
   racine du dossier maître Trading, jamais dans le dossier d'un projet.
-- Sous-dossier par projet, sur le modèle de `Modeles/` :
+- Sous-dossier par projet, sur le modèle de `Master/` :
   `Prompts/<projet>/prompt_<objet>.md` (ex. `Prompts/maAtr/`,
   `Prompts/Recherche/Retour1/`). Les prompts transverses sans projet
   vont dans `Prompts/Divers/`.
