@@ -1,7 +1,8 @@
 # Architecture des stratégies — quatre couches
 
-Statut : **PROJET du 2026-11-16 (version 4, points confirmés par Jérôme),
-en attente de validation finale.** Vocabulaire et règles communes à tous
+Statut : **validé par Jérôme (confirmé le 2026-11-17) ; précisé le 2026-11-17
+par la refonte du moteur propmaster** (`Master/Propmaster/Backtest/propfirm/
+cahier_des_charges_refonte.md` et `spec_propmaster.md`, en projet). Vocabulaire et règles communes à tous
 les projets de Trading (Gunmaster, Propmaster, etc.). Les détails
 d'implémentation vivent dans chaque projet.
 
@@ -39,8 +40,12 @@ et futurmaster (futures chez un courtier) sont à venir.
 - Dans un contexte, un couple peut avoir plusieurs optimisations
   **indépendantes**. Pour propmaster, par plan : **Évaluation** (minimiser
   le temps de passage en respectant les règles du plan) et **Financé**
-  (maximiser le sortino). Définition exacte des mesures : spécification
-  propfirm, jamais recopiée ici.
+  (maximiser le sortino). Les deux optimisations sont
+  indépendantes, sauf une dépendance à sens unique : le Financé reçoit de
+  l'Évaluation du même couple et du même plan le temps d'attente après la
+  perte d'un compte et le coût d'obtention d'un compte (aucune boucle).
+  Définition exacte des mesures : spécification du moteur propmaster, jamais
+  recopiée ici.
 - Identité d'une optimisation : (couple, contexte master, plan le cas
   échéant, objectif, forme globale).
 
@@ -56,7 +61,13 @@ La couche 2 optimise en deux temps.
    l'échantillon. 1 % du capital s'entend comme risque par trade (100 $).
    L'arrondi écarte les trades à stop large et peut favoriser des stops
    serrés : la part de trades non déclenchés est rapportée pour chaque
-   forme.
+   forme, avec une alerte fixée à l'avance (20 %) ; au-delà, la forme est
+   examinée avant d'être retenue, décision tracée. Un trade dont la taille
+   acceptable est nulle (arrondi à zéro, ou limite de risque du contexte
+   franchie même avec un contrat) n'est pas déclenché. Le critère de forme est
+   commun aux objectifs d'un contexte : sortino par trade (sur la table de
+   trades en R, seuil 0) × √(trades déclenchés par an), à maximiser ; aucune
+   mesure de compte n'est rapportée à cette étape.
 2. **Optimisation de la taille.** L'algorithme dépend du contexte master :
    pnl pour gunmaster, sous plafond de risque (`MAX_RISK_FRACTION`) ;
    sortino et temps de passage pour propmaster.
@@ -66,7 +77,9 @@ Puis :
 - **Couche 3** : les tailles de chaque couple sont adaptées pour neutraliser
   les effets de corrélation entre les couples du portefeuille. La méthode se
   définit au cas par cas ; une méthode générique sera adoptée si elle se
-  dégage.
+  dégage. Les tailles s'expriment en coefficients appliqués à la fraction de
+  risque, sans modifier la valeur issue de la couche 2 ; quand la taille
+  dépend de l'état du compte, la conversion en contrats se fait en couche 4.
 - **Couche 4** : un **coefficient global unique**, appliqué à chaque trade,
   satisfait le niveau de risque que le trader accepte, matérialisé par un
   drawdown maximal (gunmaster : −30 %). Il est choisi pour atteindre ce
@@ -97,12 +110,25 @@ Puis :
 
 ## 5. Contrats de données
 
-- **Contexte injecté en couche 2** : le contexte fournit à la simulation du
-  couple ses contraintes (entrées interdites, clôtures forcées, coûts) ; la
-  stratégie est relancée quand les contraintes changent.
+- **Contexte injecté en couche 2** : le contexte impose à la simulation du
+  couple ses **contraintes** (entrées interdites, clôtures forcées, coûts) et
+  le **domaine admissible de ses paramètres** (maximum de contrats, sessions,
+  types d'ordre ou de sortie, actifs supportés ; une variante entière peut
+  être exclue) ; la stratégie est relancée quand les contraintes changent.
+  Les restrictions sont déclarées côté contexte, dans le vocabulaire de la
+  stratégie, qui ne connaît aucun contexte.
+- **Contrat de contexte** : chaque contexte expose un contrat en trois parties :
+  *contraintes imposées* à la stratégie, *données exigées* en retour (colonnes
+  et unités de la table de trades, couverture des échantillons), *sorties* (format
+  et objectifs). L'orchestrateur vérifie les données contre le contrat à
+  l'entrée et à chaque frontière de couche. Le contrat est versionné ; sa
+  version et l'empreinte du contexte entrent dans la clé de cache et dans
+  l'identité du couple.
 - **2 → 3** : table de trades en R (stratégie, actif, forme globale,
   contexte, dates et prix d'entrée et de sortie, R réalisé, MFE / MAE
-  minute).
+  minute), au **format de base unique** du cœur, identique pour tous les
+  contextes ; un contexte peut exiger un sur-ensemble, jamais un autre
+  format.
 - **3 → 4** : flux de trades pondérés par portefeuille, sur un calendrier
   commun (équité jointe à la minute) ; les corrélations se mesurent sur ces
   flux. Pas de resimulation des signaux à partir de la couche 3.
@@ -135,6 +161,26 @@ Interfaces cibles d'un moteur à cœur commun :
 | Module de stratégie | signaux et règles d'entrée et de sortie, interface unique |
 | Module de contexte | contraintes injectées, politique de dimensionnement, objectif (critère de performance et critère de risque), adaptateur d'exécution par plateforme |
 
+**Orchestrateur** : point d'entrée unique, commun aux contextes
+(`Ressources_master/orchestrateur.py`). Il lit une spécification de run
+(couche, contexte, couple ou portefeuille, plan, objectif, forme globale),
+injecte à chaque couche les éléments du contexte, vérifie les contrats,
+tient le journal des essais, le cache et l'envoi des résultats. Il ne contient
+aucune logique métier d'un contexte.
+
+**Interface de stratégie** : agnostique au contexte, dans le dossier de la
+stratégie (`interface_<strat>.py`, versionnée avec elle), qui implémente un
+protocole défini dans le cœur : identité, paramètres et axes de forme déclarés,
+capacités, échantillons et données, production de la table de base à partir des
+contraintes imposées. Aucun nom de contexte n'y figure ; une conversion propre à
+un contexte vit dans le dossier de ce contexte. Un contexte qui exige une
+capacité absente fait refuser le run ; on ne modifie pas la stratégie pour un
+contexte.
+
+**Témoin** (stratégie sans signal) : informatif, jamais un critère de
+sélection ; capacité facultative de la stratégie, son absence n'arrête pas un
+run.
+
 Entre backtest et production (langages différents selon la plateforme), la
 parité se contrôle par des **vecteurs de test communs** (jeu de barres fixe
 et trades attendus) plutôt que par du code partagé.
@@ -142,7 +188,8 @@ et trades attendus) plutôt que par du code partagé.
 ## 7. Codes et registres
 
 - Stratégie : colonne « Code » de `Ressources_master/registres/registre_strategies.md`.
-- Actif : clés de `Propmaster/Backtest/propfirm/actifs.toml` pour un futures ; section « Codes
+- Actif : clés de `Propmaster/Backtest/propfirm/actifs.toml` pour un futures
+  (déplacement prévu dans `Ressources_master/registres/`, ressource commune) ; section « Codes
   d'actifs » du même registre pour les autres.
 - Contexte : section « Codes de contexte » du même registre (`GUN`, `PROP`,
   `FUT`).
@@ -197,6 +244,13 @@ Structure réalisée : `Gunmaster/` (dont `Backtest/Aw`, `Backtest/Sweep1`),
 `Ressources_master/` (`chemins.py`, `ohlcv_acces.py`, `resultats_acces.py`,
 `stats_r.py`, `Indicateurs/`, `registres/`), `Strategies/Julian`.
 
+Prévu (décisions de Jérôme, 2026-11-17, après la refonte du moteur propmaster) :
+l'orchestrateur, le protocole d'interface de stratégie et le schéma de la table
+de base dans `Ressources_master/` ; le moteur propmaster en paquet
+`Propmaster/Backtest/Moteur/` (sous-dossiers `contexte/`, `couche2/`, `couche3/`,
+`couche4/`), qui remplace `propfirm/` ; le contrat de contexte dans
+`Propmaster/` ; `actifs.toml` dans `Ressources_master/registres/`.
+
 ## 10. Points ouverts
 
 1. **Vecteurs de test communs** : format et premiers cas (stratégie MARET,
@@ -208,3 +262,6 @@ Structure réalisée : `Gunmaster/` (dont `Backtest/Aw`, `Backtest/Sweep1`),
 4. **Registres des masters et des portefeuilles** : un registre par master
    et par couche, emplacement : `Ressources_master/registres/` (qui contient déjà le
    registre des stratégies) ; à créer avec le premier master formalisé.
+5. **Protocole d'interface de stratégie et schéma de la table de base** : forme
+   exacte, à fixer avec l'orchestrateur minimal (refonte propmaster, étapes 2
+   et 3).
