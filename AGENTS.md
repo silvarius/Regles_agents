@@ -88,11 +88,13 @@ projets qui le symlinkent — pas de copier-coller à répercuter.
   sont stockés comme de simples fichiers texte et les règles ne sont plus
   chargées.
 - **`Modeles/` est un dépôt unique, `Master`** (remote `silvarius/Master`) : il
-  réunit Gunmaster, Recherche et propfirm (fusion du 2026-11-16, historiques
-  conservés ; les anciens dépôts sont archivés en lecture seule sur GitHub). Un
+  réunit Gunmaster et Propmaster (contextes master), `Ressources_master/` et
+  `Strategies/` (fusion du 2026-11-16 de Gunmaster, Recherche et propfirm,
+  historiques conservés ; les anciens dépôts sont archivés en lecture seule sur
+  GitHub ; `Recherche/` et `propfirm/` ont été réaffectés le 2026-11-17). Un
   seul `.git`, à la racine de `Modeles/` : aucun dépôt dans les sous-dossiers de
-  projet. Les liens `AGENTS.md` des sous-dossiers (`../../Regles_agents/…`) et
-  celui de la racine (`../Regles_agents/…`) supposent `Modeles/` directement sous
+  projet. Les liens `AGENTS.md` des sous-dossiers et celui de la racine
+  (`../Regles_agents/…`) sont relatifs et supposent `Modeles/` directement sous
   `Trading/`. Les dossiers `Resultats/` sont ignorés à tous les niveaux.
 - **Dossiers `Archives/`** : toujours dans le `.gitignore` du dépôt qui les
   contient (`Archives/`). Un travail abandonné s'archive dans un sous-dossier

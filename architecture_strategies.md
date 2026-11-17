@@ -2,7 +2,7 @@
 
 Statut : **PROJET du 2026-11-16 (version 4, points confirmés par Jérôme),
 en attente de validation finale.** Vocabulaire et règles communes à tous
-les projets de Trading (Recherche, Gunmaster, propfirm, etc.). Les détails
+les projets de Trading (Gunmaster, Propmaster, etc.). Les détails
 d'implémentation vivent dans chaque projet.
 
 ## 1. Les quatre couches
@@ -123,8 +123,9 @@ Un master définit :
 
 Plusieurs masters peuvent partager des **ressources communes** : utilitaires
 logiciels, données de marché, accès aux données et aux résultats. Exemple de
-duplication à résorber : `ohlcv_acces.py` existe en copie identique dans
-`Recherche/` et `Gunmaster/Backtest/`.
+duplication résorbée (2026-11-17) : `ohlcv_acces.py` est un exemplaire unique dans
+`Ressources_master/` (il existait en copie identique dans `Recherche/` et
+`Gunmaster/Backtest/`).
 
 Interfaces cibles d'un moteur à cœur commun :
 
@@ -140,15 +141,15 @@ et trades attendus) plutôt que par du code partagé.
 
 ## 7. Codes et registres
 
-- Stratégie : colonne « Code » de `Recherche/registre_strategies.md`.
-- Actif : clés de `propfirm/actifs.toml` pour un futures ; section « Codes
+- Stratégie : colonne « Code » de `Ressources_master/registres/registre_strategies.md`.
+- Actif : clés de `Propmaster/Backtest/propfirm/actifs.toml` pour un futures ; section « Codes
   d'actifs » du même registre pour les autres.
 - Contexte : section « Codes de contexte » du même registre (`GUN`, `PROP`,
   `FUT`).
 - Couple et variante : `<CTX>-<STRAT>-<ACTIF>[-<MNÉMONIQUE>]`.
 - **Registre des masters**, et **un registre par master et par couche** (un
-  portefeuille dépend de son master). Emplacement à fixer avec la structure
-  du dépôt.
+  portefeuille dépend de son master). Emplacement : `Ressources_master/registres/`
+  (à créer avec le premier master formalisé).
 
 ## 8. Cas dégénérés
 
@@ -176,15 +177,25 @@ Décisions de Jérôme (2026-11-16) :
   module unique de `Ressources_master/` et par des variables d'environnement
   (`TRADING_DATA_DIR`, `TRADING_CACHE_DIR`). Cela sert aussi les VPS.
 
-Propositions, non tranchées :
+Propositions validées par Jérôme (2026-11-16) et réalisées le 2026-11-17 :
 
 - Un dossier `Strategies/` pour la couche 1 (spécification et détecteurs
   agnostiques du contexte), distinct de `Ressources_master/` ; Julian (contexte non
-  défini) y vivrait.
+  défini) y vit. Les spécifications des autres stratégies restent à côté de
+  leur moteur, sous `Propmaster/Backtest/` ou `Gunmaster/Backtest/`, jusqu'à
+  ce qu'un second contexte réutilise la stratégie.
 - Les skills et règles de méthode (recherche, backtest, audit de biais) à la
-  racine de `Master`, pour s'appliquer à tous les contextes.
-- Migration en deux temps : fusion mécanique sans changer les dossiers, puis
-  réaffectation par étapes avec `git mv`, tests verts à chaque étape.
+  racine de `Master` (`.cursor/skills`, `.claude/skills` lien relatif,
+  `.claude/rules/00-master-general.md`), pour s'appliquer à tous les contextes.
+- Migration en deux temps : fusion mécanique sans changer les dossiers (temps A),
+  puis réaffectation par étapes avec `git mv`, tests verts à chaque étape
+  (temps B : `Recherche/` et `propfirm/` réaffectés, dossier `Recherche/`
+  supprimé le 2026-11-17).
+
+Structure réalisée : `Gunmaster/` (dont `Backtest/Aw`, `Backtest/Sweep1`),
+`Propmaster/Backtest/{propfirm,Retour1,Maret_MNQ,Fvg_MNQ}`,
+`Ressources_master/` (`chemins.py`, `ohlcv_acces.py`, `resultats_acces.py`,
+`stats_r.py`, `Indicateurs/`, `registres/`), `Strategies/Julian`.
 
 ## 10. Points ouverts
 
@@ -195,4 +206,5 @@ Propositions, non tranchées :
 3. **Critères de validation par défaut** : à fixer une fois la base de
    référence constituée (§4).
 4. **Registres des masters et des portefeuilles** : un registre par master
-   et par couche, emplacement dans `Ressources_master/` à fixer.
+   et par couche, emplacement : `Ressources_master/registres/` (qui contient déjà le
+   registre des stratégies) ; à créer avec le premier master formalisé.
