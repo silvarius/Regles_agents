@@ -43,9 +43,13 @@ et futurmaster (futures chez un courtier) sont à venir.
   (maximiser le sortino). Les deux optimisations sont
   indépendantes, sauf une dépendance à sens unique : le Financé reçoit de
   l'Évaluation du même couple et du même plan le temps d'attente après la
-  perte d'un compte et le coût d'obtention d'un compte (aucune boucle).
-  Définition exacte des mesures : spécification du moteur propmaster, jamais
-  recopiée ici.
+  perte d'un compte et le coût d'obtention d'un compte (aucune boucle), à
+  l'exclusion de la forme et de la table de trades : chaque objectif a sa forme
+  globale. Un couple propmaster déployé porte donc deux formes (comptes
+  d'Évaluation, comptes financés) : deux instances de la stratégie ou un
+  changement de paramètres au passage de phase, à fixer à la couche 4
+  (adaptateur d'exécution, portabilité Gunbot). Définition exacte des mesures :
+  spécification du moteur propmaster, jamais recopiée ici.
 - Identité d'une optimisation : (couple, contexte master, plan le cas
   échéant, objectif, forme globale).
 
