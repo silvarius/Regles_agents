@@ -69,12 +69,23 @@ La couche 2 optimise en deux temps.
    examinée avant d'être retenue, décision tracée. Un trade dont la taille
    acceptable est nulle (arrondi à zéro, ou limite de risque du contexte
    franchie même avec un contrat) n'est pas déclenché. Le critère de forme est
-   commun aux objectifs d'un contexte : sortino par trade (sur la table de
-   trades en R, seuil 0) × √(trades déclenchés par an), à maximiser ; aucune
-   mesure de compte n'est rapportée à cette étape.
+   choisi par objectif dans un registre de critères nommés du contexte
+   (maximiser ; par exemple, pour propmaster, sortino par trade × (trades
+   déclenchés par an)^α ou PnL net à taille unique pondéré par le drawdown) ;
+   aucune mesure de compte n'est rapportée à cette étape.
 2. **Optimisation de la taille.** L'algorithme dépend du contexte master :
    pnl pour gunmaster, sous plafond de risque (`MAX_RISK_FRACTION`) ;
    sortino et temps de passage pour propmaster.
+
+Le découpage en deux temps est la règle par défaut, mais il suppose que le
+classement des formes à taille fixe prédise celui à taille optimale
+(séparabilité). Quand elle n'est pas tenue, un contexte peut remplacer les deux
+temps d'un objectif par une **étape conjointe forme + taille** : une seule
+recherche sur les axes de forme et de taille, avec la mécanique d'optimisation
+commune. Propmaster l'emploie pour l'objectif Évaluation (critère : temps de
+passage, avec un filtre d'éligibilité sur le taux de passage) ; son objectif
+Financé garde la forme à taille unique puis la taille. Le résultat de l'étape
+conjointe a le format de l'étape taille, plus la forme retenue.
 
 Puis :
 
